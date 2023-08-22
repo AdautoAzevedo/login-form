@@ -5,7 +5,7 @@ const Home = () => {
 
     //This will get the passed values
     const location = useLocation();
-    const auth = location.state.token;
+    let auth = location.state.token;
     
     const handleLogout = async () =>{
       const logoutURL = "http://localhost:3500/logout";
@@ -21,6 +21,7 @@ const Home = () => {
               const message = response.status;
               throw new Error(message);
           }
+
           console.log("Sucessful logout ");
           navigate("/");
         } catch (error) {
@@ -38,17 +39,40 @@ const Home = () => {
             "Authorization": `Bearer ${auth}`,
             "Content-Type": "application/json",
           }
-        }); 
+        });
+         
         if (!response.ok){
-          navigate("/denied");
-          const message = response.status;
-          throw new Error(message);
+          getNewToken();  
         }
 
         const data = await response.json();
         console.log(data);
       } catch (error) {
         console.error(error);
+      }
+    };
+
+    //Here we can get a new accessToken when the old one has expired
+    const getNewToken = async () =>{
+      const refreshURL = "http://localhost:3500/refresh";
+      
+      try {
+        const response = await fetch(refreshURL, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          credentials: 'include'
+        });
+         if (!response.ok){
+          const message = response.status;
+          throw new Error(message);
+        } 
+        
+        //We receive the new token and store it in the auth variable
+        const data = await response.json();
+        auth = data.accessToken;
+        
+      } catch (error) {
+        console.log(error);
       }
     }
     

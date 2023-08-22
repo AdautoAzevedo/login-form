@@ -18,29 +18,29 @@ const Login = ( {user, setUser} ) => {
       try {
           const response = await fetch(authURL,{
               method: "POST",
-              headers:{
-                  "Content-type":"application/json"
-              },
+              headers:{"Content-type":"application/json"},
+              credentials: 'include',
               body:JSON.stringify(user)
           });
+
           if (!response.ok){
             navigate("/denied");
             const message = response.status;
             throw new Error(message);
           }
+
           const data = await response.json();
           const token = data.accessToken;
-          console.log(token);
           navigate("/home", {state: {token:token}});  
         } catch (error) {
           console.log(error);
       }
   };
   
-    const handleLogin = (event) =>{
-      event.preventDefault();
-      sendLoginRequest(user);
-    }
+  const handleLogin = (event) =>{
+    event.preventDefault();
+    sendLoginRequest(user);
+  };
     
   return (
     <main>

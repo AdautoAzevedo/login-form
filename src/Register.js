@@ -3,43 +3,40 @@ import { useNavigate } from 'react-router-dom';
 
 const Register = ({user, setUser}) => {
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleChange =(event) =>{
-        const { name, value } = event.target;
-        setUser({
-          ...user,
-          [name]: value
+  const handleChange =(event) =>{
+      const { name, value } = event.target;
+      setUser({
+        ...user,
+        [name]: value
+      });
+  }
+
+  const registerUser = async () =>{
+    const baseURL = "http://localhost:3500/api";
+    try {
+        const response = await fetch(baseURL,{
+            method:"POST",
+            headers:{
+                "Content-type":"application/json"
+            }, 
+            body:JSON.stringify(user)
         });
-      }
-
-    const registerUser = async () =>{
-        const baseURL = "http://localhost:3500/api";
-        try {
-            const response = await fetch(baseURL,{
-                method:"POST",
-                headers:{
-                    "Content-type":"application/json"
-                }, 
-                body:JSON.stringify(user)
-            });
-            if(!response.ok){
-                const message = response.status;
-                throw new Error(message);
-            }
-            console.log(response);            
-            console.log("Enviado + ", user);
-            navigate("/home");
-        } catch (error) {
-            console.log(error);
-        };
-      };
-    
-      const handleRegister =(event)=>{
-        event.preventDefault();
-        console.log(user);
-        registerUser(user);
-      };
+        if (!response.ok){
+            const message = response.status;
+            throw new Error(message);
+        }
+        navigate("/home");
+    } catch (error) {
+        console.log(error);
+    };
+  };
+  
+  const handleRegister =(event)=>{
+    event.preventDefault();
+    registerUser(user);
+  };
         
   return (
     <main>
