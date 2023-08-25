@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from './context/AuthProvider';
 
 
 const Login = ( {user, setUser} ) => {
   const navigate = useNavigate();
+
+  const { setToken } = useAuth();
 
   const handleChange =(event) =>{
       const { name, value } = event.target;
@@ -31,7 +34,8 @@ const Login = ( {user, setUser} ) => {
 
           const data = await response.json();
           const token = data.accessToken;
-          navigate("/home", {state: {token:token}});  
+          setToken(token);
+          navigate("/home");  
         } catch (error) {
           console.log(error);
       }

@@ -23,6 +23,7 @@ const Register = ({user, setUser}) => {
             }, 
             body:JSON.stringify(user)
         });
+        
         if (!response.ok){
             const message = response.status;
             throw new Error(message);

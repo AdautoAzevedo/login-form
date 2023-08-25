@@ -1,11 +1,10 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
+import { useAuth } from './context/AuthProvider';
 
 const Home = () => {
     const navigate = useNavigate();
 
-    //This will get the passed values
-    const location = useLocation();
-    let auth = location.state.token;
+    const {auth, setToken} = useAuth();
     
     const handleLogout = async () =>{
       const logoutURL = "http://localhost:3500/logout";
@@ -33,6 +32,7 @@ const Home = () => {
     const getUsers = async () =>{
       const baseURL = "http://localhost:3500/api";
       try {
+        console.log(auth);
         const response = await fetch(baseURL,{
           method: "GET",
           headers:{
@@ -62,6 +62,7 @@ const Home = () => {
           headers: {"Content-Type": "application/json"},
           credentials: 'include'
         });
+        
          if (!response.ok){
           const message = response.status;
           throw new Error(message);
@@ -69,8 +70,8 @@ const Home = () => {
         
         //We receive the new token and store it in the auth variable
         const data = await response.json();
-        auth = data.accessToken;
-        
+        setToken(data.accessToken);
+
       } catch (error) {
         console.log(error);
       }
