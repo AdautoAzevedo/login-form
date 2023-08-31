@@ -1,17 +1,10 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
+import Form from './Form';
 
 const Register = ({user, setUser}) => {
 
   const navigate = useNavigate();
-
-  const handleChange =(event) =>{
-      const { name, value } = event.target;
-      setUser({
-        ...user,
-        [name]: value
-      });
-  }
 
   const registerUser = async () =>{
     const baseURL = "http://localhost:3500/api";
@@ -42,21 +35,8 @@ const Register = ({user, setUser}) => {
   return (
     <main>
         <h2>Register page</h2>
-        <form>         
-          <input 
-            type="text" 
-            name='userName'
-            value={user.userName}
-            onChange={handleChange}
-          />
-          <input 
-            type="text" 
-            name='password'
-            value={user.password}
-            onChange={handleChange}
-          />
-          <button onClick={handleRegister}>Register</button>
-        </form>
+        <Form user={user} setUser= {setUser} />
+        <button onClick={handleRegister}>Register</button>
     </main>
   )
 }

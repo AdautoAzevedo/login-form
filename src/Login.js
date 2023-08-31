@@ -1,20 +1,12 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './context/AuthProvider';
-
+import Form from './Form';
 
 const Login = ( {user, setUser} ) => {
   const navigate = useNavigate();
 
   const { setToken } = useAuth();
-
-  const handleChange =(event) =>{
-      const { name, value } = event.target;
-      setUser({
-        ...user,
-        [name]: value
-      });
-    };
 
   const sendLoginRequest = async ()  =>{
     const authURL = "http://localhost:3500/auth";
@@ -40,31 +32,17 @@ const Login = ( {user, setUser} ) => {
           console.log(error);
       }
   };
-  
+
   const handleLogin = (event) =>{
     event.preventDefault();
     sendLoginRequest(user);
-  };
-    
+  };  
+
   return (
     <main>
         <h2>Login Page</h2>
-        <form>         
-          <input 
-            type="text" 
-            name='userName'
-            value={user.userName}
-            onChange={handleChange}
-          />
-          <input 
-            type="password" 
-            name='password'
-            value={user.password}
-            onChange={handleChange}
-          />
-          <button onClick={handleLogin}>Login</button>
-        </form>
-        
+        <Form user= {user} setUser= {setUser} />
+        <button onClick={handleLogin}>Login</button>
         <Link to={"/register"} className='link' >Click here to register</Link>
     </main>
   )

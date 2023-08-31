@@ -63,7 +63,7 @@ const Home = () => {
           credentials: 'include'
         });
         
-         if (!response.ok){
+        if (!response.ok){
           const message = response.status;
           throw new Error(message);
         } 
